@@ -14,8 +14,17 @@ buildscript {
     }
 }
 
+plugins {
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
+    // Use the JaCoCo plugin to calculate code coverage
+    id 'jacoco'
+    // Use the Checkstyle plugin to enforce a coding style
+    id 'checkstyle'
+}
+
 allprojects {
-    apply plugin: "eclipse"
+    apply plugin: "eclipse" //what is this for?
 
     version = '1.0'
     ext {
@@ -65,3 +74,34 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 }
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+def checkstyleVersion = '10.4'
+
+configurations {
+  checkstyleRules
+}
+
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+
+    checkstyleRules("com.puppycrawl.tools:checkstyle:${checkstyleVersion}") {
+        transitive = false
+    }
+}
+
+test {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion "${checkstyleVersion}"
+    config = resources.text.fromArchiveEntry(configurations.checkstyleRules, 'google_checks.xml')
+}
+
