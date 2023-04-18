@@ -31,7 +31,7 @@ jobs:
     # Jacoco testing report and executable jar.
     # Checkstyle report gets generated automatically when built.
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2.4.2
       with:
         arguments: build jacocoTestReport desktop:dist
     # Upload the executable desktop JAR, Jacoco and checkstyle report.
