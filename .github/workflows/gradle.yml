@@ -45,4 +45,34 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       with:
           name: jacoco-report
-          path: tests/build/reports/tests
+          path: tests/build/reports/jacoco
+  release:
+    runs-on: ubuntu-latest
+    needs: [ "build" ]
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Ubuntu Build Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: lib-ubuntu-latest.jar
+      - name: Rename Ubuntu Build Artifact
+        run: mv desktop-1.0.jar lib-ubuntu.jar
+      - name: Download MacOS Build Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: lib-macos-latest.jar
+      - name: Rename MacOS Build Artifact
+        run: mv desktop-1.0.jar lib-macos.jar
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: lib-windows-latest.jar
+      - name: Rename Windows Build Artifact
+        run: mv desktop-1.0.jar lib-windows.jar
+      - name: Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        with:
+          files: lib*.jar
