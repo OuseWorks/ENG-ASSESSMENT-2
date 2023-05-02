@@ -228,7 +228,6 @@ public class CustomerAISystem extends IteratingSystem {
 
             }
         }
-
         if (customer.interactingCook != null) {
             PlayerComponent player = Mappers.player.get(customer.interactingCook);
 
